@@ -5,9 +5,13 @@
 
 (load-theme 'misterioso)
 (setq default-background (face-attribute 'default :background))
-(unless window-system
-  (setq frame-background-mode (frame-parameter nil 'background-mode))
-  (set-face-background 'default "unspecified-bg"))
+;; (unless window-system
+;;   (setq frame-background-mode (frame-parameter nil 'background-mode))
+;;   (set-face-background 'default "unspecified-bg"))
+(defun on-after-init ()
+  (unless (display-graphic-p (selected-frame))
+    (set-face-background 'default "unspecified-bg" (selected-frame))))
+(add-hook 'window-setup-hook 'on-after-init)
 
 (when (eq window-system 'w32)
   (set-face-attribute 'default nil :family "Consolas")
