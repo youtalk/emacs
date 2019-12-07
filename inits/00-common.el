@@ -21,6 +21,8 @@
 (column-number-mode t)
 (show-paren-mode t)
 
+(setq tramp-shell-prompt-pattern "^.*[#$%>] *")
+
 (defalias 'exit 'save-buffers-kill-emacs)
 (global-set-key (kbd "C-x C-c")
                 (lambda () (interactive) (message "use M-x exit")))
