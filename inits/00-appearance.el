@@ -13,9 +13,5 @@
     (set-face-background 'default "unspecified-bg" (selected-frame))))
 (add-hook 'window-setup-hook 'on-after-init)
 
-(when (eq window-system 'w32)
-  (set-face-attribute 'default nil :family "Consolas")
-  (set-fontset-font nil '(#x80 . #x3FFFFF) (font-spec :family "Yu Gothic")))
-(when (eq window-system 'x)
-  (set-face-attribute 'default nil :family "Inconsolata")
-  (set-fontset-font nil '(#x80 . #x3FFFFF) (font-spec :family "IPA Gothic")))
+(if window-system
+  (set-frame-font "Source Han Code JP")
