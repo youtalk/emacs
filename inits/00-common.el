@@ -23,6 +23,6 @@
 
 (global-set-key "\C-c\#" 'comment-or-uncomment-region)
 
-(defalias 'exit 'save-buffers-kill-emacs)
-(global-set-key (kbd "C-x C-c")
-                (lambda () (interactive) (message "use M-x exit")))
+;; (defalias 'exit 'save-buffers-kill-emacs)
+;; (global-set-key (kbd "C-x C-c")
+;;                 (lambda () (interactive) (message "use M-x exit")))
