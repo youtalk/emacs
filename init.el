@@ -11,3 +11,8 @@
   (init-loader-show-log-after-init nil)
   :init
   (init-loader-load))
+
+; nxml-mode
+(setq auto-mode-alist
+      (append '(("\\.\\(html\\|xhtml\\|shtml\\|launch\\)\\'" . nxml-mode))
+              auto-mode-alist))
