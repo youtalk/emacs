@@ -14,5 +14,5 @@
 
 ; nxml-mode
 (setq auto-mode-alist
-      (append '(("\\.\\(html\\|xhtml\\|shtml\\|launch\\|test\\)\\'" . nxml-mode))
+      (append '(("\\.\\(html\\|xhtml\\|shtml\\|urdf\\|xacro\\|launch\\|test\\)\\'" . nxml-mode))
               auto-mode-alist))
