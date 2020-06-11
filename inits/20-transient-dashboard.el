@@ -13,6 +13,7 @@
        [("g" "Grep" transient-dashboard--grep)]
        [("h" "Helm" helm-mini)]
        [("H" "Helm (full)" transient-dashboard--helm-full)]
+       [("i" "Quoted Insert" quoted-insert)]
        [("j" "Goto Line" goto-line)]
        [("l" "LSP" transient-dashboard--lsp)]
        [("m" "Magit" magit-status)]
@@ -37,7 +38,18 @@
     (define-transient-command transient-dashboard--lsp ()
       [[("d" "Definition" lsp-find-definition)]
        [("i" "Implementation" lsp-find-implementation)]
-       [("r" "Rename" lsp-rename)]])
+       [("r" "Rename" lsp-rename)]
+       [("w" "Workspace folders" transient-dashboard--lsp-workspace-folders)]])
+
+    (defun transient-dashboard--lsp-workspace-folders ()
+      (interactive)
+      (helm
+       :sources (helm-build-sync-source
+                    "LSP Workspace Folders"
+                  :candidates (lsp-session-folders (lsp-session))
+                  :action '(("Switch" . lsp-workspace-folders-switch)
+                            ("Remove" . lsp-workspace-folders-remove)))
+       :buffer "*helm lsp workspace folders*"))
 
     (defun transient-dashboard--git-sync ()
       (interactive)
@@ -59,5 +71,4 @@
                          parent
                        (magit-commit-tree "" tree parent))))
         (magit-update-ref ref "sync" commit)
-        (magit-run-git-async "push" "-v" remote (format "%s:%s" ref ref)))))
-  :demand)
+        (magit-run-git-async "push" "-v" remote (format "%s:%s" ref ref))))))

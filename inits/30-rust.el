@@ -2,9 +2,8 @@
 
 (use-package lsp-mode
   :custom
-  (lsp-rust-server 'rls)
-  ;; cargo install --git https://github.com/rust-analyzer/rust-analyzer.git ra_lsp_server
-  ;; (lsp-rust-server 'rust-analyzer)
+  ;; cargo install --git https://github.com/rust-analyzer/rust-analyzer.git --tag 2020-05-11 rust-analyzer
+  (lsp-rust-server 'rust-analyzer)
   (lsp-rust-clippy-preference "on")
   :hook
   (rust-mode . lsp))
