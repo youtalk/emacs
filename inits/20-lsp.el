@@ -2,8 +2,8 @@
   :custom
   (lsp-enable-snippet nil)
   ;; (lsp-prefer-flymake nil)
-  ;; :hook
-  ;; (before-save . lsp-format-buffer)
+  :hook
+  (before-save . lsp-format-buffer)
   )
 
 (use-package lsp-ui
