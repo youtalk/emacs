@@ -19,4 +19,6 @@
 (add-hook 'window-setup-hook 'on-after-init)
 
 (if window-system
-  (set-frame-font "Source Han Code JP")
+  (set-frame-font "Source Han Code JP"))
+
+(setq linum-format "%4d\u2502")

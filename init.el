@@ -11,13 +11,3 @@
   (init-loader-show-log-after-init nil)
   :init
   (init-loader-load))
-
-; nxml-mode
-(setq auto-mode-alist
-      (append '(("\\.\\(html\\|xhtml\\|shtml\\|urdf\\|xacro\\|launch\\|test\\)\\'" . nxml-mode))
-              auto-mode-alist))
-
-; yaml-mode
-(setq auto-mode-alist
-      (append '(("\\.\\(yaml\\|yml\\|rviz\\)\\'" . yaml-mode))
-              auto-mode-alist))
