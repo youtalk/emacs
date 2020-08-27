@@ -5,3 +5,5 @@
   (web-mode-script-padding 2)
   :mode
   "\\.html?\\'")
+
+(use-package htmlize)
