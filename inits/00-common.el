@@ -27,6 +27,11 @@
 ;; (global-set-key (kbd "C-x C-c")
 ;;                 (lambda () (interactive) (message "use M-x exit")))
 
+; org-mode
+(setq org-html-validation-link nil)
+(setq org-startup-truncated nil)
+(setq org-startup-folded nil)
+
 ; c++-mode
 (setq auto-mode-alist
       (append '(("\\.\\(h\\)\\'" . c++-mode))

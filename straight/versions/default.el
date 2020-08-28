@@ -21,7 +21,6 @@
  ("indent-guide" . "7fc710748f9e5a086acfe77970f117df89ee9749")
  ("init-loader" . "44829fa70f5c4cba03d36db5fa2c969001325b91")
  ("js2-mode" . "40aab27581279d0fdbfeb9afeb85f39d401a927f")
- ("let-alist" . "caeeae983455079ec89c69b7958a2e5a5b60003c")
  ("lsp-mode" . "ee7a57eaaaabe6d834ffe55e110648f553909900")
  ("lsp-ui" . "5e850c23b402b215d212703e00ed097369f28ecd")
  ("magit" . "1ce4d1c0781b1925912704f3385128433f46d07c")
