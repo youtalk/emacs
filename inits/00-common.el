@@ -46,3 +46,8 @@
 (setq auto-mode-alist
       (append '(("\\.\\(yaml\\|yml\\|rviz\\)\\'" . yaml-mode))
               auto-mode-alist))
+
+; typescript-mode
+(setq auto-mode-alist
+      (append '(("\\.\\(tsx\\)\\'" . typescript-mode))
+              auto-mode-alist))
