@@ -3,6 +3,8 @@
 (prefer-coding-system 'utf-8-unix)
 (setq-default indent-tabs-mode nil)
 (setq make-backup-files nil)
+(setq auto-save-default nil)
+(setq create-lockfiles nil)
 (setq custom-file (locate-user-emacs-file "custom.el"))
 
 (setq ring-bell-function 'ignore)
@@ -27,6 +29,7 @@
 ;; (global-set-key (kbd "C-x C-c")
 ;;                 (lambda () (interactive) (message "use M-x exit")))
 
+
 ; org-mode
 (setq org-html-validation-link nil)
 (setq org-startup-truncated nil)
@@ -49,5 +52,5 @@
 
 ; typescript-mode
 (setq auto-mode-alist
-      (append '(("\\.\\(tsx\\)\\'" . typescript-mode))
+      (append '(("\\.\\(tsx\\)\\'" . js-mode))
               auto-mode-alist))
