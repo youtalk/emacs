@@ -132,3 +132,11 @@
   "/Pipfile\\'")
 (use-package typescript-mode)
 (use-package yaml-mode)
+
+(setq linum-format "%4d\u2502")
+(use-package lsp-mode
+  :custom
+  (lsp-c++-server 'clangd)
+  :hook
+  (c++-mode . lsp))
+(use-package cmake-mode)
