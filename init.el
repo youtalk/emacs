@@ -130,7 +130,6 @@
 (use-package toml-mode
   :mode
   "/Pipfile\\'")
-(use-package typescript-mode)
 (use-package yaml-mode)
 
 (setq linum-format "%4d\u2502")
@@ -140,3 +139,15 @@
   :hook
   (c++-mode . lsp))
 (use-package cmake-mode)
+(setq auto-mode-alist
+      (append '(("\\.\\(tsx\\)\\'" . js-mode))
+              auto-mode-alist))
+(use-package lsp-mode
+  :ensure t
+  :commands (lsp lsp-deferred)
+  :hook (js-mode . (lambda ()
+                     (lsp-deferred)
+                     (setq js-indent-level 2)
+                     (setq typescript-indent-level 2)
+                     (setq tab-width 2)
+                     )))
