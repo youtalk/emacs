@@ -12,7 +12,7 @@
       (eval-print-last-sexp)))
   (load bootstrap-file nil 'nomessage))
 
-(straight-use-package 'use-package)
+(straight-use-package '(use-package :type built-in))
 (custom-set-variables
  '(straight-use-package-by-default t))
 
@@ -27,16 +27,13 @@
 (global-display-line-numbers-mode +1)
 (menu-bar-mode -1)
 (show-paren-mode +1)
+(when window-system
+  (load-theme 'modus-vivendi)
+  (set-frame-font "-*-Iosevka Nerd Font Mono-regular-normal-normal-*-*-160-*-*-m-0-iso10646-1")
+  (tool-bar-mode -1))
 
 (setq initial-major-mode 'fundamental-mode)
 (setq initial-scratch-message "")
-(defun make-scratch ()
-  (unless (get-buffer "*scratch*")
-    (set-buffer (get-buffer-create "*scratch*"))
-    (funcall initial-major-mode)
-    (erase-buffer)))
-(add-hook 'after-save-hook 'make-scratch)
-(add-hook 'kill-buffer-hook 'make-scratch)
 
 (use-package company
   :bind
@@ -60,9 +57,11 @@
                 :new 'consult--file-action
                 :state 'consult--file-state)
                :append))
-(use-package lsp-mode
+(use-package eglot :straight (:type built-in)
   :hook
-  (before-save . lsp-format-buffer))
+  (before-save . eglot-format-buffer)
+  (eglot-managed-mode . (lambda ()
+                          (eglot-inlay-hints-mode (if window-system +1 -1)))))
 (use-package magit)
 (use-package orderless
   :custom
@@ -84,6 +83,24 @@
        [("h" "Buffer" consult-buffer)]
        [("j" "Goto line" goto-line)]
        [("m" "Magit" magit-status)]])))
+(use-package treesit :straight (:type built-in)
+  :config
+  (let (
+        (treesit-language-source-alist
+         '(
+           (dockerfile "https://github.com/camdencheek/tree-sitter-dockerfile" "v0.1.2")
+           (go "https://github.com/tree-sitter/tree-sitter-go" "v0.20.0")
+           (gomod "https://github.com/camdencheek/tree-sitter-go-mod" "v1.0.0")
+           (json "https://github.com/tree-sitter/tree-sitter-json" "v0.19.0")
+           (python "https://github.com/tree-sitter/tree-sitter-python" "v0.20.4")
+           (rust "https://github.com/tree-sitter/tree-sitter-rust" "v0.20.4")
+           (toml "https://github.com/tree-sitter/tree-sitter-toml" "v0.5.1")
+           (tsx "https://github.com/tree-sitter/tree-sitter-typescript" "v0.20.2" "tsx/src")
+           (typescript "https://github.com/tree-sitter/tree-sitter-typescript" "v0.20.2" "typescript/src")
+           (yaml "https://github.com/ikatyang/tree-sitter-yaml" "v0.5.0"))))
+    (dolist (source treesit-language-source-alist)
+      (unless (treesit-ready-p (car source) t)
+        (treesit-install-language-grammar (car source))))))
 (use-package vertico
   :init
   (vertico-mode +1))
@@ -98,39 +115,62 @@
   :init
   (windmove-default-keybindings))
 
-(use-package dockerfile-mode
-  :hook
-  (dockerfile-mode-hook . (lambda () (setq-local tab-width 4)))
+(use-package dockerfile-ts-mode
+  :demand
   :mode
-  "/Containerfile\\'")
-(use-package go-mode)
+  ;; https://github.com/emacs-mirror/emacs/blob/emacs-29.1/lisp/progmodes/dockerfile-ts-mode.el#L191
+  "\\(?:Containerfile\\(?:\\..*\\)?\\|\\.[Cc]ontainerfile\\)\\'")
+(use-package go-ts-mode)
 (use-package hcl-mode
   :mode
   "\\.tf\\'")
+(use-package json-ts-mode)
 (use-package markdown-mode
   :custom
   (markdown-asymmetric-header t))
-(use-package lsp-pyright
+(use-package python
+  :mode
+  ;; https://github.com/emacs-mirror/emacs/blob/emacs-29.1/lisp/progmodes/python.el#L6736
+  ("\\.py[iw]?\\'" . python-ts-mode)
+  :config
+  (cl-defmethod project-root ((project (head pyproject))) (cdr project))
+  (defun find-pyproject (dir)
+    (let ((project (locate-dominating-file dir "pyproject.toml")))
+      (if project (cons 'pyproject project))))
   :hook
-  (python-mode . (lambda () (require 'lsp-pyright) (lsp))))
+  (python-ts-mode . (lambda ()
+                      (add-hook 'project-find-functions 'find-pyproject nil t)
+                      (eglot-ensure))))
 (use-package protobuf-mode)
-(use-package rust-mode
-  :custom
-  (lsp-rust-server 'rust-analyzer)
-  (lsp-rust-analyzer-server-command '("rustup" "run" "stable" "rust-analyzer"))
-  (lsp-rust-clippy-preference "on")
+(use-package rust-ts-mode
+  :demand
+  :config
+  (cl-defmethod project-root ((project (head cargo))) (cdr project))
+  (defun find-cargo-workspace (dir)
+    (with-current-buffer (generate-new-buffer "*cargo-metadata*")
+      (let* ((default-directory dir)
+             (metadata
+              (when (eq (call-process "cargo" nil t nil "metadata" "--format-version=1" "--no-deps") 0)
+                (goto-char (point-min))
+                (json-parse-buffer))))
+        (kill-buffer)
+        (if metadata (cons 'cargo (gethash "workspace_root" metadata))))))
   :hook
-  (rust-mode . lsp))
+  (rust-ts-mode . (lambda ()
+                    (add-hook 'project-find-functions 'find-cargo-workspace nil t)
+                    (eglot-ensure))))
 (use-package sh-script
   :custom
   (sh-here-document-word " 'EOD'")
   :mode
   ("/PKGBUILD\\'" . shell-script-mode))
 (use-package systemd)
-(use-package toml-mode
+(use-package toml-ts-mode
+  :demand
   :mode
-  "/Pipfile\\'")
-(use-package yaml-mode)
+  ("/Pipfile\\'" . toml-ts-mode))
+(use-package typescript-ts-mode)
+(use-package yaml-ts-mode)
 
 ;; youtalk
 (setq create-lockfiles nil)
