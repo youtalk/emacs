@@ -29,7 +29,7 @@
 (show-paren-mode +1)
 (when window-system
   (load-theme 'modus-vivendi)
-  (set-frame-font "-*-Iosevka Nerd Font Mono-regular-normal-normal-*-*-160-*-*-m-0-iso10646-1")
+  (set-frame-font "Source Han Code JP")
   (tool-bar-mode -1))
 
 (setq initial-major-mode 'fundamental-mode)
@@ -173,6 +173,7 @@
 (use-package yaml-ts-mode)
 
 ;; youtalk
+(setq display-warning-minimum-level :error)
 (setq create-lockfiles nil)
 (use-package recentf
   :bind
@@ -207,3 +208,4 @@
 (add-hook 'prog-mode-hook 'copilot-mode)
 (define-key copilot-completion-map (kbd "<tab>") 'copilot-accept-completion)
 (define-key copilot-completion-map (kbd "TAB") 'copilot-accept-completion)
+(use-package htmlize)
