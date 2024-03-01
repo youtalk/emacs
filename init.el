@@ -20,8 +20,8 @@
 (setq make-backup-files nil)
 
 (global-set-key (kbd "C-h") 'delete-backward-char)
-(defalias 'exit 'save-buffers-kill-emacs)
-(global-set-key (kbd "C-x C-c") (lambda () (interactive) (message "use M-x exit")))
+;; (defalias 'exit 'save-buffers-kill-emacs)
+;; (global-set-key (kbd "C-x C-c") (lambda () (interactive) (message "use M-x exit")))
 
 (column-number-mode +1)
 (global-display-line-numbers-mode +1)
